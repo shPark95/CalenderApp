@@ -31,4 +31,9 @@ public class ScheduleController {
         return scheduleService.getSchedules(startDate, endDate, author);
     }
 
+    // 선택한 일정 ID로 조회 (단건 조회)
+    @GetMapping("/{id}")
+    public Schedule getScheduleById(@PathVariable Long id) {
+        return scheduleService.getScheduleById(id);
+    }
 }

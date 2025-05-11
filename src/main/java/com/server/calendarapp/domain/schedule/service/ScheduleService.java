@@ -16,6 +16,7 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
+    // 일정 생성
     public void createSchedule(ScheduleDto scheduleDto) {
         Schedule schedule = new Schedule();
         schedule.setTitle(scheduleDto.getTitle());
@@ -29,7 +30,13 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
 
+    // 일정 목록 조회 (날짜, 작성자)
     public List<Schedule> getSchedules(String startDate, String endDate, String author) {
         return scheduleRepository.findSchedules(startDate, endDate, author);
+    }
+
+    // 선택한 일정ID로 조회
+    public Schedule getScheduleById(Long id) {
+        return scheduleRepository.findById(id);
     }
 }

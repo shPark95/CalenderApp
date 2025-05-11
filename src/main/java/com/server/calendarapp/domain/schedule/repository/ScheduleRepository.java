@@ -1,6 +1,7 @@
 package com.server.calendarapp.domain.schedule.repository;
 
 import com.server.calendarapp.domain.schedule.model.Schedule;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -58,4 +59,17 @@ public class ScheduleRepository {
         return jdbcTemplate.query(sql.toString(), params.toArray(), new ScheduleRowMapper());
     }
 
+    // 선택한 일정ID로 조회
+    public Schedule findById(long id) {
+        String sql = "SELECT * FROM schedule WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{id},
+                    new ScheduleRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("일정을 찾을 수 없습니다.");
+        }
+    }
 }
