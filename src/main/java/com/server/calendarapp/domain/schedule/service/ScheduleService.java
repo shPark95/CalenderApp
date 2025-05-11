@@ -29,4 +29,7 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
 
+    public List<Schedule> getSchedules(String startDate, String endDate, String author) {
+        return scheduleRepository.findSchedules(startDate, endDate, author);
+    }
 }
