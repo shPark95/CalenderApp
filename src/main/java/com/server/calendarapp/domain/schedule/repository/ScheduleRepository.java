@@ -72,4 +72,19 @@ public class ScheduleRepository {
             throw new RuntimeException("일정을 찾을 수 없습니다.");
         }
     }
+
+    public void updateSchedule(Schedule schedule) {
+        String sql = "UPDATE schedule SET title = ?, author = ?, updatedAt = ? WHERE id = ?";
+        jdbcTemplate.update(sql,
+                schedule.getTitle(),
+                schedule.getAuthor(),
+                schedule.getUpdatedAt(),
+                schedule.getId());
+    }
+
+    public void deleteSchedule(Long id) {
+        String sql = "DELETE FROM schedule WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
 }
