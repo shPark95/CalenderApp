@@ -31,8 +31,8 @@ public class ScheduleService {
     }
 
     // 일정 목록 조회 (날짜, 작성자)
-    public List<Schedule> getSchedules(String startDate, String endDate, String author) {
-        return scheduleRepository.findSchedules(startDate, endDate, author);
+    public List<Schedule> getSchedules(String startDate, String endDate, Long memberId) {
+        return scheduleRepository.findSchedules(startDate, endDate, memberId);
     }
 
     // 선택한 일정ID로 조회

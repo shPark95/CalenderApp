@@ -26,9 +26,9 @@ public class ScheduleController {
     public List<Schedule> getSchedules(
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
-            @RequestParam(required = false) String author
+            @RequestParam(required = false) Long memberId
     ) {
-        return scheduleService.getSchedules(startDate, endDate, author);
+        return scheduleService.getSchedules(startDate, endDate, memberId);
     }
 
     // 선택한 일정 ID로 조회 (단건 조회)
