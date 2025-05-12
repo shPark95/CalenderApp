@@ -39,4 +39,30 @@ public class ScheduleService {
     public Schedule getScheduleById(Long id) {
         return scheduleRepository.findById(id);
     }
+
+    // 선택한 일정 수정
+    public void updateSchedule(Long id, ScheduleDto dto) {
+        Schedule schedule = scheduleRepository.findById(id);
+
+        if (!schedule.getPassword().equals(dto.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        schedule.setTitle(dto.getTitle());
+        schedule.setAuthor(dto.getAuthor());
+        schedule.setUpdatedAt(LocalDateTime.now());
+
+        scheduleRepository.updateSchedule(schedule);
+    }
+
+    // 선택한 일정 삭제
+    public void deleteSchedule(Long id, String password) {
+        Schedule schedule = scheduleRepository.findById(id);
+
+        if (!schedule.getPassword().equals(password)) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        scheduleRepository.deleteSchedule(id);
+    }
 }

@@ -36,4 +36,18 @@ public class ScheduleController {
     public Schedule getScheduleById(@PathVariable Long id) {
         return scheduleService.getScheduleById(id);
     }
+
+    // 선택한 일정 수정
+    @PatchMapping("/{id}")
+    public String updateSchedule(@PathVariable Long id, @RequestBody ScheduleDto dto) {
+        scheduleService.updateSchedule(id, dto);
+        return "수정 완료!";
+    }
+
+    // 선택한 일정 삭제
+    @DeleteMapping("/{id}")
+    public String deleteSchedule(@PathVariable Long id, @RequestBody ScheduleDto dto) {
+        scheduleService.deleteSchedule(id, dto.getPassword());
+        return "삭제 완료!";
+    }
 }
