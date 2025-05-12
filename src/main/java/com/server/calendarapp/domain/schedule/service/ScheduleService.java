@@ -35,6 +35,12 @@ public class ScheduleService {
         return scheduleRepository.findSchedules(startDate, endDate, memberId);
     }
 
+    // 페이지네이션 조회
+    public List<Schedule> getPagedSchedules(int page, int size) {
+        int offset = (page - 1) * size;
+        return scheduleRepository.findPagedSchedules(size, offset);
+    }
+
     // 선택한 일정ID로 조회
     public Schedule getScheduleById(Long id) {
         return scheduleRepository.findById(id);
