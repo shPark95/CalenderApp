@@ -31,6 +31,16 @@ public class ScheduleController {
         return scheduleService.getSchedules(startDate, endDate, memberId);
     }
 
+    // 페이지네이션
+    @GetMapping("/paged")
+    public List<Schedule> getPagedSchedules(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        System.out.println("Fetching paged schedules with page: " + page + " and size: " + size);
+        return scheduleService.getPagedSchedules(page, size);
+    }
+
     // 선택한 일정 ID로 조회 (단건 조회)
     @GetMapping("/{id}")
     public Schedule getScheduleById(@PathVariable Long id) {

@@ -61,6 +61,18 @@ public class ScheduleRepository {
         return jdbcTemplate.query(sql.toString(), params.toArray(), new ScheduleRowMapper());
     }
 
+    public List<Schedule> findPagedSchedules(int limit, int offset) {
+        String sql = """
+            SELECT s.id, s.memberId, s.title, m.name AS author, s.password, s.createdAt, s.updatedAt
+            FROM schedule s
+            JOIN member m ON s.memberId = m.id
+            ORDER BY s.updatedAt DESC
+            LIMIT ? OFFSET ?
+        """;
+
+        return jdbcTemplate.query(sql, new Object[]{limit, offset}, new ScheduleRowMapper());
+    }
+
     // 선택한 일정ID로 조회
     public Schedule findById(long id) {
         String sql = "SELECT * FROM schedule WHERE id = ?";
