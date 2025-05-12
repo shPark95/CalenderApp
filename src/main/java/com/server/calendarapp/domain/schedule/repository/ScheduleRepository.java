@@ -31,30 +31,32 @@ public class ScheduleRepository {
         );
     }
 
-    public List<Schedule> findSchedules(String startDate, String endDate, String author) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM schedule WHERE 1=1");
+    public List<Schedule> findSchedules(String startDate, String endDate, Long memberId) {
+        StringBuilder sql = new StringBuilder(
+            "SELECT s.* FROM schedule s JOIN member m ON s.memberId = m.id WHERE 1=1"
+        );
         List<Object> params = new ArrayList<>();
 
         if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
-            sql.append(" AND DATE(updatedAt) BETWEEN ? AND ?");
+            sql.append(" AND DATE(s.updatedAt) BETWEEN ? AND ?");
             params.add(LocalDate.parse(startDate));
             params.add(LocalDate.parse(endDate));
         } else if (startDate != null && !startDate.isEmpty()) {
-            sql.append(" AND DATE(updatedAt) >= ?");
+            sql.append(" AND DATE(s.updatedAt) >= ?");
             params.add(LocalDate.parse(startDate));
         } else if (endDate != null && !endDate.isEmpty()) {
-            sql.append(" AND DATE(updatedAt) <= ?");
+            sql.append(" AND DATE(s.updatedAt) <= ?");
             params.add(LocalDate.parse(endDate));
         }
 
         // 작성자명 조건 추가
-        if (author != null && !author.isEmpty()) {
-            sql.append(" AND author = ?");
-            params.add(author);
+        if (memberId != null) {
+            sql.append(" AND s.memberId = ?");
+            params.add(memberId);
         }
 
         // 내림차순 정렬
-        sql.append(" ORDER BY updatedAt DESC");
+        sql.append(" ORDER BY s.updatedAt DESC");
 
         return jdbcTemplate.query(sql.toString(), params.toArray(), new ScheduleRowMapper());
     }

@@ -11,6 +11,7 @@ public class ScheduleRowMapper implements RowMapper<Schedule> {
     public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
         Schedule schedule = new Schedule();
         schedule.setId(rs.getLong("id"));
+        schedule.setMemberId(rs.getLong("memberId"));
         schedule.setTitle(rs.getString("title"));
         schedule.setAuthor(rs.getString("author"));
         schedule.setPassword(rs.getString("password"));
