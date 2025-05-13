@@ -1,7 +1,7 @@
 package com.server.calendarapp.domain.schedule.repository;
 
+import com.server.calendarapp.common.exception.ScheduleNotFoundException;
 import com.server.calendarapp.domain.schedule.model.Schedule;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +19,7 @@ public class ScheduleRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save(Schedule schedule) {
+    public Schedule save(Schedule schedule) {
         String sql = "INSERT INTO schedule (memberId, title, author, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(
                 sql,
@@ -30,6 +30,7 @@ public class ScheduleRepository {
                 Timestamp.valueOf(schedule.getCreatedAt()),
                 Timestamp.valueOf(schedule.getUpdatedAt())
         );
+        return schedule;
     }
 
     public List<Schedule> findSchedules(String startDate, String endDate, Long memberId) {
@@ -75,19 +76,23 @@ public class ScheduleRepository {
     }
 
     // 선택한 일정ID로 조회
-    public Optional<Schedule> findById(long id) {
+    public Schedule findById(long id) {
         String sql = "SELECT * FROM schedule WHERE id = ?";
         List<Schedule> result = jdbcTemplate.query(sql, new Object[]{id}, new ScheduleRowMapper());
-        return result.stream().findFirst();
+        if (result.isEmpty()) throw new ScheduleNotFoundException(id);
+
+        return result.get(0);
     }
 
-    public void updateSchedule(Schedule schedule) {
+    public Schedule updateSchedule(Schedule schedule) {
         String sql = "UPDATE schedule SET title = ?, author = ?, updatedAt = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 schedule.getTitle(),
                 schedule.getAuthor(),
                 schedule.getUpdatedAt(),
                 schedule.getId());
+
+        return schedule;
     }
 
     public void deleteSchedule(Long id) {
