@@ -2,6 +2,7 @@ package com.server.calendarapp.domain.member.controller;
 
 import com.server.calendarapp.domain.member.dto.MemberDto;
 import com.server.calendarapp.domain.member.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public void createMember(@RequestBody MemberDto memberDto) {
+    public void createMember(@RequestBody @Valid MemberDto memberDto) {
         memberService.createMember(memberDto);
     }
 }

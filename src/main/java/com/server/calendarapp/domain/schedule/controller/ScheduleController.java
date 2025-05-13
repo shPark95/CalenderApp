@@ -3,6 +3,7 @@ package com.server.calendarapp.domain.schedule.controller;
 import com.server.calendarapp.domain.schedule.dto.ScheduleDto;
 import com.server.calendarapp.domain.schedule.model.Schedule;
 import com.server.calendarapp.domain.schedule.service.ScheduleService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public String create(@RequestBody ScheduleDto scheduleDto) {
+    public String create(@RequestBody @Valid ScheduleDto scheduleDto) {
         scheduleService.createSchedule(scheduleDto);
         return "등록 완료!";
     }
