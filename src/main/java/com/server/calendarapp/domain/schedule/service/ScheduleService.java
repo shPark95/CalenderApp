@@ -1,5 +1,7 @@
 package com.server.calendarapp.domain.schedule.service;
 
+import com.server.calendarapp.common.exception.InvalidPasswordException;
+import com.server.calendarapp.common.exception.ScheduleNotFoundException;
 import com.server.calendarapp.domain.schedule.dto.ScheduleDto;
 import com.server.calendarapp.domain.schedule.model.Schedule;
 import com.server.calendarapp.domain.schedule.repository.ScheduleRepository;
@@ -43,15 +45,15 @@ public class ScheduleService {
 
     // 선택한 일정ID로 조회
     public Schedule getScheduleById(Long id) {
-        return scheduleRepository.findById(id);
+        return scheduleRepository.findById(id).orElseThrow(() -> new ScheduleNotFoundException(id));
     }
 
     // 선택한 일정 수정
     public void updateSchedule(Long id, ScheduleDto dto) {
-        Schedule schedule = scheduleRepository.findById(id);
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ScheduleNotFoundException(id));
 
         if (!schedule.getPassword().equals(dto.getPassword())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new InvalidPasswordException();
         }
 
         schedule.setTitle(dto.getTitle());
@@ -63,10 +65,10 @@ public class ScheduleService {
 
     // 선택한 일정 삭제
     public void deleteSchedule(Long id, String password) {
-        Schedule schedule = scheduleRepository.findById(id);
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ScheduleNotFoundException(id));
 
         if (!schedule.getPassword().equals(password)) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new InvalidPasswordException();
         }
 
         scheduleRepository.deleteSchedule(id);

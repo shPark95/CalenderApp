@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepository {
@@ -74,17 +75,10 @@ public class ScheduleRepository {
     }
 
     // 선택한 일정ID로 조회
-    public Schedule findById(long id) {
+    public Optional<Schedule> findById(long id) {
         String sql = "SELECT * FROM schedule WHERE id = ?";
-        try {
-            return jdbcTemplate.queryForObject(
-                    sql,
-                    new Object[]{id},
-                    new ScheduleRowMapper()
-            );
-        } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("일정을 찾을 수 없습니다.");
-        }
+        List<Schedule> result = jdbcTemplate.query(sql, new Object[]{id}, new ScheduleRowMapper());
+        return result.stream().findFirst();
     }
 
     public void updateSchedule(Schedule schedule) {
